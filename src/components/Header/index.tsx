@@ -3,10 +3,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import NavItem from './nav-item'
-import { FiMenu } from 'react-icons/fi'
 
 import { motion } from 'framer-motion'
-import { Dispatch, SetStateAction } from 'react'
+import MenuMobile from './MenuMobile'
+// import { Dispatch, SetStateAction, useState } from 'react'
 
 const NAV_ITEMS = [
   {
@@ -19,11 +19,11 @@ const NAV_ITEMS = [
   },
 ]
 
-type HeaderProps = {
-  setMenuIsVisible: Dispatch<SetStateAction<boolean>>
-}
+// type HeaderProps = {
+//   setMenuIsVisible: Dispatch<SetStateAction<boolean>>
+// }
 
-const Header = ({ setMenuIsVisible }: HeaderProps) => {
+const Header = () => {
   return (
     <motion.header
       initial={{ top: -100 }}
@@ -48,10 +48,7 @@ const Header = ({ setMenuIsVisible }: HeaderProps) => {
           })}
         </nav>
 
-        <FiMenu
-          onClick={() => setMenuIsVisible(true)}
-          className="h-8 w-8 cursor-pointer transition-colors hover:text-teal-500 sm:hidden"
-        />
+        <MenuMobile />
       </div>
     </motion.header>
   )
