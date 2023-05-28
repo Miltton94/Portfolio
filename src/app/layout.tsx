@@ -26,7 +26,6 @@ export const metadata = {
     default: 'Home',
     template: '%s | M Dev',
   },
-  description: 'Portifólio com Next.js, com meus melhores trabalhos...',
   icons: {
     url: '/favicon.png',
   },
