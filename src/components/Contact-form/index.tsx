@@ -1,0 +1,88 @@
+'use client'
+
+import { z } from 'zod'
+import Button from '../Button'
+import SectionTitle from '../Section-title'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
+import Loading from '../Loading'
+import { toast } from 'react-hot-toast'
+import { motion } from 'framer-motion'
+import { fadeUpAnimation } from '@/lib/animations'
+
+const contactFormSchema = z.object({
+  name: z.string().min(3).max(100),
+  email: z.string().email(),
+  message: z.string().min(1).max(500),
+})
+
+type ContactFormData = z.infer<typeof contactFormSchema>
+
+const ContactForm = () => {
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
+  })
+
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      await axios.post('/api/contact', data)
+      toast.success('Mensagem enviada com sucesso!')
+      reset()
+    } catch {
+      toast.error('Ocorreu um erro ao enviar a mensagem. Tente novamente.')
+    }
+  }
+
+  return (
+    <section
+      id="contact"
+      className="flex items-center justify-center bg-gray-950 px-6 py-16 md:py-32"
+    >
+      <div className="mx-auto w-full max-w-[420px] text-center">
+        <SectionTitle
+          subtitle="Contato"
+          title="Vamos trabalhar juntos? Entre em contato"
+        />
+
+        <motion.form
+          {...fadeUpAnimation}
+          onSubmit={handleSubmit(onSubmit)}
+          className="mt-12 flex w-full flex-col gap-4"
+        >
+          <input
+            placeholder="Nome"
+            className="h-14 w-full rounded-lg bg-gray-800 p-4 text-gray-50 outline-none ring-teal-600 placeholder:text-gray-400 focus:ring-2"
+            {...register('name')}
+          />
+          <input
+            type="email"
+            placeholder="E-mail"
+            className="h-14 w-full rounded-lg bg-gray-800 p-4 text-gray-50 outline-none ring-teal-600 placeholder:text-gray-400 focus:ring-2"
+            {...register('email')}
+          />
+          <textarea
+            placeholder="Mensagem"
+            className="h-[138px] w-full resize-none rounded-lg bg-gray-800 p-4 text-gray-50 outline-none ring-teal-600 placeholder:text-gray-400 focus:ring-2"
+            maxLength={500}
+            {...register('message')}
+          />
+
+          <Button
+            disabled={isSubmitting}
+            className="mt-6 min-w-[170px] shadow-button lg:mx-auto lg:w-max"
+          >
+            {isSubmitting ? <Loading /> : 'Enviar mensagem'}
+          </Button>
+        </motion.form>
+      </div>
+    </section>
+  )
+}
+
+export default ContactForm
