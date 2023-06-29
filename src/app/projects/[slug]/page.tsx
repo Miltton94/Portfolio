@@ -54,6 +54,8 @@ const getProjectDetails = async (
 const Project = async ({ params: { slug } }: ProjectProps) => {
   const { project } = await getProjectDetails(slug)
 
+  console.log(slug)
+
   return (
     <>
       <ProjectDetails projectInfo={project} />
